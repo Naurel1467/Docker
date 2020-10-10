@@ -1,0 +1,23 @@
+---
+version: '3'
+services:
+    db:
+        image: mysql
+        container_name: mysql-1
+        environment:
+            MYSQL_ROOT_USER: raviteja
+            MYSQL_ROOT_PASSWORD: raviteja
+        networks:
+            -   net-2
+    
+    wordpress:
+        image: wordpress
+        container_name: wordpress-1
+        ports:
+            -   "8989:90"
+        networks:
+            -   net-2
+
+networks:
+    net-2
+...

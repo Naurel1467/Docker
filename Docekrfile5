@@ -1,0 +1,8 @@
+FROM centos
+
+RUN yum update \
+    && yum install -y httpd
+
+EXPOSE 90
+
+ENTRYPOINT ["httpd","-D","FOREGROUND"]

@@ -26,4 +26,6 @@ services:
         restart: always
 volumes: 
     db_data:           
-        
+        driver: "local"
+        labels: "raviteja"
+        mountpoint: /root/

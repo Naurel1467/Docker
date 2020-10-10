@@ -1,3 +1,21 @@
+## things to remember while using docker-compose.yml
+1. if you face a error <orphan-present> and system prompts you to use <--renove-orphans> dont use this this will remove your existing project which the current docker-compose.yml thought as orphans to use the current docker-compose use a command
+-- docker-compose -f <filename> -p <project-name> up -d
+link--> https://stackoverflow.com/questions/50947938/docker-compose-orphan-containers-warning
+
+2. every docker-compose command will create its own network vpn and own volume which you can see as "path_default" eg root_mynetwork for netwrok and for volume it will create a randowm directory if not mentioned, if mentioned then "path_mentioned_name_of_directort" eg root_data
+
+3. if you want to moutn an external volume to a container while creating a docker-compose.yml use 
+''' volumes:
+      volume_name:
+         external: True
+'''
+4. to attach already present network to a container creating, then in docker-compose.yml use
+''' networks:
+      default:
+         external:
+            name: network_name
+'''
 ## Important docker command 
 
 ##### Important tag for Docker 

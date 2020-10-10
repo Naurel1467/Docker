@@ -1,0 +1,12 @@
+---
+version: '3'
+services:
+  build:
+    context: ./label/Docker-jenkins-ubuntu
+  volumes:
+    - root_db_data: /var/jenkins_home
+  ports:
+    - "8080:8080"
+volumes:
+  root_db_data:
+    external: True

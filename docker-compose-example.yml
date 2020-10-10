@@ -1,0 +1,55 @@
+version: '2'
+services:
+  project2_applications:
+    image: tianon/true
+    volumes:
+      - ../../:/var/www/vhosts/project2
+  project2_nginx:
+    build: ./images/nginx
+    image: project2/nginx:latest
+    ports:
+      - "8080:80"
+    volumes_from:
+      -  project2_applications
+    networks:
+      project2_appnet:
+        aliases:
+          - project2.app
+          - admin.project2.app
+  project2_php:
+    image: project2/php:latest
+    ports:
+      - "7777:7777"
+    build: 
+      context: ./images/php
+      dockerfile: Dockerfile
+    volumes_from:
+      -  project2_applications
+    networks:
+      -  project2_appnet
+  project2_mysql:
+    image: project2/mysql:latest
+    build: ./images/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      -  project2_mysqldata:/var/lib/mysql
+    networks:
+      -  project2_appnet
+    ports:
+      - "33067:3306"
+  project2_workspace:
+    image: project2/workspace:latest
+    build:
+      context: ./images/workspace
+    volumes_from:
+      - project2_applications
+    working_dir: /var/www/vhosts/videosite
+    networks:
+      -  project2_appnet
+networks:
+  project2_appnet:
+    driver: "bridge"
+volumes:
+   project2_mysqldata:
+    driver: "local"

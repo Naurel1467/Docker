@@ -1,0 +1,21 @@
+#his file demonstrate ow to connect to an existing network(net-1)
+---
+version: '3'
+services: 
+    db:
+        image: postgres
+        environment: 
+            POSTGRES_USER: raviteja
+            POSTGRES_PASSWORD: raviteja
+            POSTGRES_DB: mydb
+        container_name: postgres-1
+            
+    adminer:
+        image: adminer
+        ports: 
+            -   8989:8080
+        container_name: adminer
+networks: 
+    default:
+        external: 
+            name: net-1   # this will let you connect to the existing network 

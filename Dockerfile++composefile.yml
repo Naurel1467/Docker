@@ -1,0 +1,36 @@
+#Dockerfile
+
+FROM ubuntu
+
+MAINTAINER raviteja
+
+RUN apt-get update \
+    && apt-get install -y openjdk-8-jdk
+
+ADD https://get.jenkins.io/war-stable/2.249.2/jenkins.war
+
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","jenkins.war"]
+
+
+
+
+
+
+docker-compose.yml
+---
+version: '3'
+services:
+ jenkins1:
+  build:
+    context: /root/label/       #path of dockerfile
+    dockerfile: Docker-jenkins-ubuntu  # dockerfile saved as Docker-jenkins-ubuntu in the above folder
+  volumes:
+    - root_db_data:/var/jenkins_home     #mounting existing volume i.e., root_db_data
+  ports:
+    - "8080:8080"
+volumes:
+ root_db_data:     
+  external: True    #external mount volume verification i.e., root_db_data is present
+...
