@@ -1,0 +1,34 @@
+version: '3'
+
+services: 
+    distro:
+        image: alpine
+        restart: always
+        container_name: custume_alpine
+        entrypoint: tail -f /dev/null
+
+    database:
+        image: postgres:latest
+        restart: always
+        container_name: database
+        ports:
+            -   "5432:5432"
+        volumes:
+            -   ../dump/tmp/
+
+    web:
+        image: nginx
+        restart: always
+        container_name: web1
+        ports: 
+            -   '8080:80'
+        volumes: 
+            -   ./mysite.template:/etc/nginx/conf.d/mysite.template
+        NGINX_HOST=sample.com 
+        NGINX_port=80
+    links: 
+        -   database: db 
+        -   distro
+volumes:
+    data:
+        external: True   #this will let you attach the external volume whuch is already created to the new container.

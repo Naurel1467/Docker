@@ -1,0 +1,21 @@
+version: '3'
+
+services: 
+    jenkins:
+        image: jenkins
+        restart: always
+        container_name: jenkins1
+        ports: 
+            -   "8080:8080"
+       
+    nexus:
+        image: sonatype/nexus3:latest
+        restart: always
+        container_name: nexus1
+        volumes: 
+            -   nexus_data:/opt/sonatype/nexus
+        ports: 
+            -   "8081:8081"    
+
+volumes: 
+    nexus_data:

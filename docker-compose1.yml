@@ -1,0 +1,29 @@
+version: '3'
+
+services: 
+    db:
+        image: mysql:5.7
+        volumes: 
+            -   db_data:/var/lib/mysql  # this will create at this path by default and db_data name changes to root_db_data
+                                                      #/var/lib/docker/volumes/root_db_data/_data
+        restart: always
+        environment: 
+            MYSQL_ROOT_PASSWORD: raviteja
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: raviteja
+            MYSQL_PASSWORD: raviteja
+
+    wordpress1:
+        depends_on: 
+            -   db
+        image: wordpress:latest
+        ports: 
+            -   "1234:80"
+        environment: 
+            WORDPRESS_DB_HOST: db:3306
+            WORDPRESS_DB_USER: raviteja
+            WORDPRESS_DB_PASSWORD: raviteja
+        restart: always
+volumes: 
+    db_data:           
+        
