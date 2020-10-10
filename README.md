@@ -6,16 +6,18 @@ link--> https://stackoverflow.com/questions/50947938/docker-compose-orphan-conta
 2. every docker-compose command will create its own network vpn and own volume which you can see as "path_default" eg root_mynetwork for netwrok and for volume it will create a randowm directory if not mentioned, if mentioned then "path_mentioned_name_of_directort" eg root_data
 
 3. if you want to moutn an external volume to a container while creating a docker-compose.yml use 
+```sh
  volumes:
-  volume_name:
-   external: True
-
+   volume_name:
+      external: True
+```
 4. to attach already present network to a container creating, then in docker-compose.yml use
+```sh
 networks:
    default:
-    external:
-     name: network_name
-
+       external:
+        name: network_name
+```
 ## Important docker command 
 
 ##### Important tag for Docker 
