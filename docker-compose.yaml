@@ -1,0 +1,29 @@
+#this is for Drupal webhosting service
+#Drupal is a free and open-source content-management framework written in PHP and distributed under the GNU General Public License. It is used as a back-end framework for at least 2.1% of all Web sites worldwide ranging from personal blogs to corporate, political, and government sites including WhiteHouse.gov and data.gov.uk. It is also used for knowledge management and business collaboration.
+---
+version: '3'
+services: 
+    drupal:
+        image: drupal
+        ports: 
+            -   "8080:80"
+        volumes:
+            -   drupal-modules:/var/www/html/modules 
+            -   drupal-profiles:/var/www/html/profiles 
+            -   drupal-sites:/var/www/html/sites 
+            -   drupal-themes:/var/www/html/themes 
+    
+    postgres:
+        image: postgres
+        container_name: postgres-db
+        environment: 
+            POSTGRES_USER: raviteja
+            POSTGRES_PASSWORD: raviteja
+            POSTGRES_DB: drupal1
+
+volumes: 
+    drupal-modules:
+    drupal-profiles:
+    drupal-sites:
+    drupal-themes:
+...
