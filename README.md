@@ -16,7 +16,7 @@ link--> https://stackoverflow.com/questions/50947938/docker-compose-orphan-conta
 networks:
    default:
        external:
-        name: network_name
+         name: network_name
 ```
 ## Important docker command 
 

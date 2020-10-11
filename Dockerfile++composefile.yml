@@ -26,7 +26,8 @@ services:
   build:
     context: /root/label/       #path of dockerfile
     dockerfile: Docker-jenkins-ubuntu  # dockerfile saved as Docker-jenkins-ubuntu in the above folder
-  volumes:
+  image: jenkins-ubuntu  # it gives custom name as we desired to the images created from above steps
+    volumes:
     - root_db_data:/var/jenkins_home     #mounting existing volume i.e., root_db_data
   ports:
     - "8080:8080"
