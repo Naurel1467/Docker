@@ -1,0 +1,110 @@
+version: "3"
+services:
+
+  redis:
+    image: redis:alpine
+    networks:
+      - frontend
+    deploy:
+      replicas: 1   #creating only single instance
+      update_config:
+        parallelism: 2  #parallelism means whenever a server gets down,for eg. out of 4 tasks while updating first 2 gets updated then the remaining 2
+        delay: 10s      #after 2 tasks gets updated it will take 10s dealy to start next 2
+      restart_policy:
+        condition: on-failure   #on failure only it'll get restart
+
+  db:
+    image: postgres:9.4
+    volumes:
+      - db-data:/var/lib/postgresql/data   #--mount type=volume,source=db-data,target=/var/lib/postgresql/data ----->it's not a bind mount type its only volume type
+    networks:
+      - backend
+    environmnet:
+      - POSTGRES_PASSWORD=password  #every db must have one environment
+    deploy:
+      placement:                #on which node this should run
+        constraints: [node.role == manager]
+
+  vote:
+    image: dockersamples/examplevotingapp_vote:before
+    ports:
+      - 5000:80
+    networks:
+      - frontend
+    depends_on:
+      - redis       #meaniing only when redis starts then this will start
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  result:
+    image: dockersamples/examplevotingapp_result:before
+    ports:
+      - 5001:80
+    networks:
+      - backend
+    depends_on:
+      - db
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  worker:
+    image: dockersamples/examplevotingapp_worker
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - db
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels: [APP=VOTING]
+      restart_policy:
+        condition: on-failure
+        delay: 10s          #after every attempt takes 10s pause
+        max_attempts: 3     #it'll take max 3 aattempts to restart
+        window: 120s        #within 120s only it will take 3 attempts
+      placement:
+        constraints: [node.role == manager]
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+#to use existing networks use
+```sh
+networks:
+    frontend:
+    backend:
+        external: True
+```
+#To create new networks while creating a service
+networks:
+  frontend:
+  backend:
+
+#to create new volumes
+volumes:
+  db-data:
+
+#to use existing volumes
+```sh
+volumes:
+    db-data:
+        existing: True
+
+...
