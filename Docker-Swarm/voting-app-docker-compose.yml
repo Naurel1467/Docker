@@ -85,13 +85,13 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+
 #to use existing networks use
-```sh
 networks:
     frontend:
     backend:
         external: True
-```
+
 #To create new networks while creating a service
 networks:
   frontend:
@@ -102,9 +102,7 @@ volumes:
   db-data:
 
 #to use existing volumes
-```sh
 volumes:
-    db-data:
-        existing: True
-
+  db-data:
+    existing: True
 ...
